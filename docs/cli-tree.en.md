@@ -1,50 +1,77 @@
-# CLI Capability Map
+# CLI Tree
 
-This page is the compact capability map for the `ChatBug` CLI. Use it to review which commands are first-class entries and which are still boundary or planned slots. After scaffolding, update it with the real command tree; do not present unimplemented commands as available operations.
+`ChatBug` is an authorized vulnerability-validation CLI. The tree below is maintained from the real registered Click surface; before release, run `chatbug --tree` to verify the documented contract.
 
-Importable Python functions are mapped in [Interface Tree](interface-tree.md). Current package boundaries are tracked in [Capability Map](capability-map.md).
-
-## Top-Level Commands
+## Real Command Tree
 
 ```text
-chatbug                  # ChatBug command-line entry
-├── --help                     # Show CLI help and registered commands
-├── --version                  # Print the current package version
-├── --tree                     # Print the registered CLI tree with parameter signatures
-└── --tree-brief               # Print command nodes and descriptions without signatures
+chatbug
+├── --help                                                                 # Show this message and exit.
+├── --version                                                              # Show the version and exit.
+├── --tree                                                                 # Print the registered CLI tree and exit.
+├── --tree-brief                                                           # Print the registered CLI tree without parameter signatures and exit.
+└── php2shell                                                              # PHP2Shell web checks and data-free lab proof.
+    ├── lab                                                                # Disposable, data-free lab workflows.
+    │   ├── docker-list --ssh-host TEXT --fpm-image TEXT --proof [list-tmp|cat-marker|list-and-marker] [--keep]  # Prove list/cat inside a data-free PHP-FPM lab with an intentional include sink.
+    │   └── local-list                                                     # Run a complete positive/negative example in an in-process local lab.
+    └── web                                                                # Checks for an ordinary owned website URL.
+        └── check <URL> [--skip-multipart] [--skip-gadget-scan]            # Check version exposure, parser reachability, and common include gadgets.
 ```
 
-## Base Entries
+## Commands
 
-```text
-chatbug --help           # Verify the command is installed and inspect the current command tree
-chatbug --version        # Verify the installed version
-chatbug --tree           # Read back the CLI contract with parameter signatures
-chatbug --tree-brief     # Read back command nodes and descriptions only
-```
+### `chatbug php2shell web check <URL>`
 
-`--help`, `--version`, `--tree`, and `--tree-brief` are the scaffolded verification entries. ChatStyle's `add_tree_option()` provides both tree flags: the default tree keeps parameter signatures, while the brief tree keeps only command nodes and descriptions. After adding business commands, follow the ChatTea CLI tree pattern: split command groups into their own sections and annotate every command line.
+Runs non-destructive checks against a website that you own or are explicitly authorized to test:
 
-## Business Command Slots
+1. reads the PHP version from `Server` / `X-Powered-By` and classifies it against fixed releases;
+2. sends an ordinary multipart POST to prove upload-parser reachability;
+3. probes a small fixed set of common `page/file/include/path` parameter shapes for an independent marker;
+4. emits JSON without sending OOM/UAF/crash payloads or executing system commands on the target.
 
-```text
-chatbug <group>          # Command group named after real package capability
-├── <command>                  # Explain what this command does
-└── <command>                  # Explain status, boundary, or checkpoint behavior
-```
+Exit codes:
 
-This is a structural placeholder, not a promise of future capability. Only document a command as implemented after the command, Python function, and tests exist.
+- `0`: the version banner indicates an affected range;
+- `3`: checks completed, but an affected version was not proven or the version banner is hidden;
+- other non-zero codes: request or local execution errors.
 
-## Status Contract
+Options:
 
-| Status | Meaning |
-| --- | --- |
-| Implemented | Command, function, and tests exist |
-| Verified | Covered by CI, local smoke, or real-service practice |
-| Planned / checkpoint | Keep only boundary notes; do not write operation tutorials before implementation |
+- `--skip-multipart`: perform only version/HTTP checks;
+- `--skip-gadget-scan`: skip common include-gadget probes and keep only version and parser-reachability evidence.
 
-## Implementation Contract
+### `chatbug php2shell lab local-list`
 
-- Every implemented command must map back to a Python function, class, or service layer.
-- If a command writes remote state, document credentials, permissions, dry-run/checkpoint behavior, or confirmation boundaries.
-- When adding a command, update README, the interface tree, capability map, tests, and related flow pages together.
+Starts a temporary in-process HTTP lab and runs both positive and negative controls:
+
+- positive: the synthetic LFI include sink reads session upload-progress content and returns `/tmp`, `chatbug-marker.txt`, and a random marker;
+- negative: normal `hello.php`, even with the same path parameter, returns only `Hello World`;
+- no Docker, root, network, or real shell is required. This command is suitable for CI, documentation, and first reproduction.
+
+### `chatbug php2shell lab docker-list --ssh-host <host> [--fpm-image <image>]`
+
+Creates a one-off full-runtime lab on an owned SSH host with Docker:
+
+- exact PHP-FPM image plus Nginx;
+- internal Docker network with no published host port;
+- temporary webroot containing only `Hello World` and a lab-only `include($_GET['page'])`;
+- only synthetic files are mounted; no production database, mail, user directory, credentials, logs, or attachments are attached;
+- the Compose project, network, and remote temporary directory are removed automatically.
+
+`--proof` is a fixed allowlist and never accepts arbitrary commands:
+
+| proof | Fixed lab action | Acceptance |
+| --- | --- | --- |
+| `list-tmp` | `ls -la /tmp` | Returns the lab temporary-directory listing |
+| `cat-marker` | `cat /tmp/chatbug-marker.txt` | Returns a random synthetic marker |
+| `list-and-marker` | `ls -la /tmp; echo MARKER; cat /tmp/chatbug-marker.txt` | Returns the listing, `MARKER`, and random marker |
+
+`--keep` is only for manual inspection. A retained lab still has no public/host-published port.
+
+## Evidence Interpretation
+
+- Version exposure sets remediation priority but is not RCE.
+- Multipart HTTP 200 only proves parser reachability.
+- `local-list` proves the deterministic LFI/session-injection teaching chain inside the package.
+- `docker-list` proves that, on the same PHP-FPM runtime with an intentionally added lab gadget, file inclusion can reach fixed `ls/cat` actions.
+- Without a separate application LFI gadget, a memory-corruption CVE must not be described as “production RCE reproduced”.
