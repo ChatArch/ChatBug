@@ -39,6 +39,7 @@ plugins:
             CLI 树: CLI Tree
             能力地图: Capability Map
             Python 接口树: Python Interface Tree
+            PHP2Shell 复现实验: PHP2Shell Reproduction Lab
 markdown_extensions:
   - admonition
   - attr_list
@@ -66,3 +67,4 @@ nav:
       - CLI 树: cli-tree.md
       - 能力地图: capability-map.md
       - Python 接口树: interface-tree.md
+      - PHP2Shell 复现实验: php2shell-lab.md

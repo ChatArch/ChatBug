@@ -5,16 +5,18 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "ChatBug"
 dynamic = ["version"]
-description = "ChatArch reserved Python package for future bug investigation tools"
+description = "Authorized website vulnerability validation with safe PHP2Shell checks and isolated reproduction labs"
 readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"
-dependencies = ["click>=8.0", "chatstyle>=0.2.0,<0.3.0", "chatenv>=0.2.11,<0.3.0"]
+dependencies = ["click>=8.0", "chatstyle>=0.2.0,<0.3.0"]
 authors = [{name = "ChatArch", email = "rex@chatarch.org"}]
-keywords = ["chatbug", "chatarch", "cli"]
+keywords = ["chatbug", "chatarch", "security", "php2shell", "cli"]
 classifiers = [
     "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
     "Operating System :: OS Independent",
+    "Topic :: Security",
 ]
 
 [project.urls]

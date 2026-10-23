@@ -1,6 +1,6 @@
 # ChatBug Docs
 
-ChatBug is a ChatArch Python package. This documentation site should hold long-lived usage notes, a command map, a capability map, and Python interface entry points. After scaffolding, replace placeholders with behavior that is actually implemented, explored, or planned for this package.
+ChatBug is an authorized website vulnerability-validation package from the ChatArch series. Its first capability focuses on PHP2Shell: safe exposure checks for ordinary owned websites, plus a disposable data-free lab that reproduces the complete acceptance chain “runtime + LFI gadget → session upload-progress injection → `ls/cat` output”.
 
 Site entry: <https://arch.gh.wzhecnu.cn/ChatBug/en/>
 
@@ -8,53 +8,40 @@ Site entry: <https://arch.gh.wzhecnu.cn/ChatBug/en/>
 
 | Scenario | Document |
 | --- | --- |
-| Install the package, run the CLI, and confirm it works | [CLI Tree](cli-tree.md) |
-| Check first-class capabilities and current boundaries | [Capability Map](capability-map.md) |
-| Call package behavior directly from Python | [Python Interface Tree](interface-tree.md) |
+| View complete commands, options, and exit codes | [CLI Tree](cli-tree.md) |
+| Understand capability status, evidence tiers, and safety boundaries | [Capability Map](capability-map.md) |
+| Call checks or lab APIs from Python | [Python Interface Tree](interface-tree.md) |
+| Run the local or PHP-FPM/Nginx isolated reproduction lab | [PHP2Shell Reproduction Lab](php2shell-lab.md) |
 
-## Documentation Organization
+## Quick Start
 
-This template keeps only durable documentation entry points; it does not generate a plan placeholder:
+```bash
+python -m pip install ChatBug
+chatbug --tree
+chatbug php2shell lab local-list
+```
 
-- **CLI tree**: the most direct command entry point, including the real command tree, status, and update checklist.
-- **Capability map**: first-class capabilities, boundaries, and out-of-scope areas.
-- **Interface tree**: importable Python APIs behind the CLI.
+`local-list` requires no Docker, root, network, or real shell. It validates the positive include sink and negative normal entry with an in-process HTTP lab.
 
-## Primary Entry Points
+## Core Conclusions
 
-<div class="grid cards" markdown>
-
-- **CLI Tree**
-
-    Start from the CLI entry point and record implemented commands, command status, and interactive conventions.
-
-    [Open CLI Tree](cli-tree.md)
-
-- **Capability Map**
-
-    Review current package boundaries and avoid presenting planned work as implemented behavior.
-
-    [Open Capability Map](capability-map.md)
-
-- **Python Interface Tree**
-
-    Keep the CLI thin and put substantive behavior in importable Python APIs.
-
-    [Open Interface Tree](interface-tree.md)
-
-</div>
+- `web check <URL>` is a non-destructive owned-website check. Version exposure, multipart reachability, and fixed gadget probes are reported as separate evidence tiers.
+- `lab local-list` is a deterministic local teaching/CI example.
+- `lab docker-list --ssh-host <host>` proves fixed `ls/cat` actions with an exact/digest-pinned PHP-FPM runtime in an internal-only Docker lab; it mounts no production data and publishes no port.
+- ChatBug does not send OOM/UAF/crash payloads, provide arbitrary commands or reverse shells, or describe version exposure as RCE.
 
 ## Documentation Status
 
-- **Implemented**: code, tests, or CLI routes exist.
-- **Verified**: covered by local smoke, CI, or real-service practice.
-- **Not implemented**: keep as boundary and planning notes only; turn into operation docs after implementation and validation.
+- **Implemented**: code, tests, and CLI paths exist.
+- **Verified**: covered by local tests, CI, or a disposable isolated lab.
+- **Not provided**: explicitly outside the safety boundary, such as production memory-corruption exploitation or an arbitrary-command framework.
 
-## Local Preview
+## Local Development Preview
 
 ```bash
-python -m pip install -e ".[docs]"
+python -m pip install -e ".[dev,docs]"
+python -m pytest -q
 mkdocs serve
 ```
 
-The Chinese home page is available at <https://arch.gh.wzhecnu.cn/ChatBug/>. Topic pages without English translations fall back to the default Chinese content through the i18n plugin.
+The Chinese entry is <https://arch.gh.wzhecnu.cn/ChatBug/>. Topic pages without English translations fall back through i18n to the default language.
