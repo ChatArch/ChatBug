@@ -430,16 +430,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
-    <span class="md-ellipsis">
-      命令说明
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="命令说明">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
   <a href="#chatbug-php2shell-web-check-url" class="md-nav__link">
     <span class="md-ellipsis">
       chatbug php2shell web check &lt;URL&gt;
@@ -447,8 +437,8 @@
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
+      
+        <li class="md-nav__item">
   <a href="#chatbug-php2shell-lab-local-list" class="md-nav__link">
     <span class="md-ellipsis">
       chatbug php2shell lab local-list
@@ -456,25 +446,20 @@
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#chatbug-php2shell-lab-docker-list-ssh-host-host-fpm-image-image" class="md-nav__link">
+      
+        <li class="md-nav__item">
+  <a href="#chatbug-php2shell-lab-docker-list" class="md-nav__link">
     <span class="md-ellipsis">
-      chatbug php2shell lab docker-list --ssh-host &lt;host&gt; [--fpm-image &lt;image&gt;]
+      chatbug php2shell lab docker-list
     </span>
   </a>
   
 </li>
-        
-      </ul>
-    </nav>
-  
-</li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
-      证据解释
+      选择命令
     </span>
   </a>
   
@@ -601,16 +586,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
-    <span class="md-ellipsis">
-      命令说明
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="命令说明">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
   <a href="#chatbug-php2shell-web-check-url" class="md-nav__link">
     <span class="md-ellipsis">
       chatbug php2shell web check &lt;URL&gt;
@@ -618,8 +593,8 @@
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
+      
+        <li class="md-nav__item">
   <a href="#chatbug-php2shell-lab-local-list" class="md-nav__link">
     <span class="md-ellipsis">
       chatbug php2shell lab local-list
@@ -627,25 +602,20 @@
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#chatbug-php2shell-lab-docker-list-ssh-host-host-fpm-image-image" class="md-nav__link">
+      
+        <li class="md-nav__item">
+  <a href="#chatbug-php2shell-lab-docker-list" class="md-nav__link">
     <span class="md-ellipsis">
-      chatbug php2shell lab docker-list --ssh-host &lt;host&gt; [--fpm-image &lt;image&gt;]
+      chatbug php2shell lab docker-list
     </span>
   </a>
   
 </li>
-        
-      </ul>
-    </nav>
-  
-</li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
-      证据解释
+      选择命令
     </span>
   </a>
   
@@ -676,55 +646,84 @@
 
 
 <h1 id="cli">CLI 树<a class="headerlink" href="#cli" title="Permanent link">&para;</a></h1>
-<p><code>ChatBug</code> 的命令行是授权漏洞验证入口。以下命令树来自真实 Click 注册面；发布前用 <code>chatbug --tree</code> 回读，不手写未实现命令。</p>
+<p>以下命令树来自 ChatBug 0.1.0 的真实 Click 注册面。安装后请优先运行 <code>chatbug --tree</code> 回读当前版本；文档只描述已实现命令。</p>
 <h2 id="_1">真实命令树<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>chatbug
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>├── --help                                                                 # Show this message and exit.
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>├── --version                                                              # Show the version and exit.
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>├── --tree                                                                 # Print the registered CLI tree and exit.
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>├── --tree-brief                                                           # Print the registered CLI tree without parameter signatures and exit.
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>└── php2shell                                                              # PHP2Shell web checks and data-free lab proof.
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    ├── lab                                                                # Disposable, data-free lab workflows.
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    │   ├── docker-list --ssh-host TEXT --fpm-image TEXT --proof [list-tmp|cat-marker|list-and-marker] [--keep]  # Prove list/cat inside a data-free PHP-FPM lab with an intentional include sink.
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    │   └── local-list                                                     # Run a complete positive/negative example in an in-process local lab.
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    └── web                                                                # Checks for an ordinary owned website URL.
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>        └── check &lt;URL&gt; [--skip-multipart] [--skip-gadget-scan]            # Check version exposure, parser reachability, and common include gadgets.
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>├── --help  # Show this message and exit.
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>├── --version  # Show the version and exit.
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>├── --tree  # Print the registered CLI tree and exit.
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>├── --tree-brief  # Print the registered CLI tree without parameter signatures and exit.
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>└── php2shell  # PHP2Shell web checks and data-free lab proof.
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    ├── lab  # Disposable, data-free lab workflows.
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    │   ├── docker-list [--ssh-host SSH-HOST] [--fpm-image FPM-IMAGE] [--proof PROOF] [--keep]  # Prove list/cat inside a data-free PHP-FPM lab with an intentional include sink.
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    │   └── local-list  # Run a complete positive/negative example in an in-process local lab.
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    └── web  # Checks for an ordinary owned website URL.
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>        └── check &lt;URL&gt; [--skip-multipart] [--skip-gadget-scan]  # Check version exposure, parser reachability, and common include gadgets.
 </code></pre></div>
-<h2 id="_2">命令说明<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
-<h3 id="chatbug-php2shell-web-check-url"><code>chatbug php2shell web check &lt;URL&gt;</code><a class="headerlink" href="#chatbug-php2shell-web-check-url" title="Permanent link">&para;</a></h3>
-<p>对一个<strong>自己拥有或已获授权</strong>的普通网站 URL 做非破坏性检查：</p>
-<ol>
-<li>读取 <code>Server</code> / <code>X-Powered-By</code> 中的 PHP 版本并按修复版本分类；</li>
-<li>发送一个普通 multipart POST，仅证明上传解析入口可达；</li>
-<li>用固定、小规模的常见 <code>page/file/include/path</code> 参数形态检查服务端是否能返回独立 marker；</li>
-<li>输出 JSON，不发送 OOM/UAF/崩溃 payload，不在目标上执行系统命令。</li>
-</ol>
+<h2 id="chatbug-php2shell-web-check-url"><code>chatbug php2shell web check &lt;URL&gt;</code><a class="headerlink" href="#chatbug-php2shell-web-check-url" title="Permanent link">&para;</a></h2>
+<p>仅对自己拥有或已获明确授权的网站运行。它会输出 JSON，不发送 OOM/UAF/崩溃 payload，也不调用目标上的系统命令。</p>
+<table>
+<thead>
+<tr>
+<th>运行方式</th>
+<th>实际请求</th>
+<th>结论边界</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>web check &lt;URL&gt; --skip-multipart</code></td>
+<td>仅 HEAD/版本头</td>
+<td>只有 HTTP/版本可见性</td>
+</tr>
+<tr>
+<td><code>web check &lt;URL&gt; --skip-gadget-scan</code></td>
+<td>HEAD + 普通 multipart</td>
+<td>parser 可达性，不做 session include 请求</td>
+</tr>
+<tr>
+<td><code>web check &lt;URL&gt;</code></td>
+<td>上述请求 + 固定 session/include marker 探测</td>
+<td>受控 PHP <code>echo</code> marker 线索，不是 <code>system()</code>/RCE 证明</td>
+</tr>
+</tbody>
+</table>
+<p>默认 marker 探测的细节：请求 filename 中只包含固定 <code>&lt;?php echo '&lt;随机 marker&gt;'; ?&gt;</code>，随后用少量固定 <code>page</code>、<code>file</code>、<code>include</code>、<code>path</code> 参数形态检查候选 session 路径。它不会请求真实用户文件，不含 <code>system()</code>，但若应用确有 LFI gadget，可能在目标 PHP 进程内执行该受控 <code>echo</code> 并写入普通请求/session 日志。</p>
+<p>因此，无跳过选项的检查应在授权和合适维护窗口内使用；低影响盘点优先选 <code>--skip-gadget-scan</code>。</p>
 <p>退出码：</p>
 <ul>
 <li><code>0</code>：版本头显示处于受影响范围；</li>
-<li><code>3</code>：检查完成但版本未证明受影响或版本头不可见；</li>
-<li>非 <code>0/3</code>：请求或本地执行错误。</li>
+<li><code>3</code>：检查已完成，但版本未证明受影响或版本头不可见；</li>
+<li>其他非零：本地参数或请求处理错误。</li>
 </ul>
-<p>常用选项：</p>
+<p>重要字段：</p>
 <ul>
-<li><code>--skip-multipart</code>：只做版本/HTTP 检查；</li>
-<li><code>--skip-gadget-scan</code>：跳过常见 include gadget 探测，只保留版本和 parser reachability。</li>
+<li><code>verdict=vulnerable_version_exposed</code>：版本暴露，非生产 RCE；</li>
+<li><code>evidence_tier=tier_2_parser_reachable</code>：普通 multipart 请求可达；</li>
+<li><code>evidence_tier=tier_3_gadget_found</code>：固定 marker 经候选 include 路径返回；</li>
+<li><code>rce_or_file_read_proven=true</code>：兼容字段名；当前只表示受控 marker 路径成立，不能解读为任意命令、用户数据读取或内存漏洞利用成功。</li>
 </ul>
-<h3 id="chatbug-php2shell-lab-local-list"><code>chatbug php2shell lab local-list</code><a class="headerlink" href="#chatbug-php2shell-lab-local-list" title="Permanent link">&para;</a></h3>
-<p>在当前进程内启动一个临时 HTTP lab，完整跑正/负向用例：</p>
+<h2 id="chatbug-php2shell-lab-local-list"><code>chatbug php2shell lab local-list</code><a class="headerlink" href="#chatbug-php2shell-lab-local-list" title="Permanent link">&para;</a></h2>
+<p>本机 contract lab 用于 CI、文档和回归：</p>
 <ul>
-<li>正向：合成的 LFI include sink 读取 session upload-progress 内容，并返回 <code>/tmp</code>、<code>chatbug-marker.txt</code> 和随机 marker；</li>
-<li>负向：普通 <code>hello.php</code> 即使带相同路径参数也只返回 <code>Hello World</code>；</li>
-<li>不需要 Docker、root、网络或真实 shell，适合 CI、文档示例和首轮教学复现。</li>
+<li>在当前进程临时绑定 <code>127.0.0.1</code>；</li>
+<li>模拟 upload-progress/session 和 lab-only include sink 的正向响应；</li>
+<li>以普通 <code>hello.php</code> 作为负向控制；</li>
+<li>输出合成的 <code>/tmp</code>、<code>chatbug-marker.txt</code> 与随机 marker；</li>
+<li>退出时关闭 socket、线程并清空内存状态。</li>
 </ul>
-<h3 id="chatbug-php2shell-lab-docker-list-ssh-host-host-fpm-image-image"><code>chatbug php2shell lab docker-list --ssh-host &lt;host&gt; [--fpm-image &lt;image&gt;]</code><a class="headerlink" href="#chatbug-php2shell-lab-docker-list-ssh-host-host-fpm-image-image" title="Permanent link">&para;</a></h3>
-<p>在自有 SSH Docker 主机上创建一次性完整运行时 lab：</p>
+<p>它不启动 PHP、Docker 或系统 shell，因此不能作为真实 PHP 命令执行的证据。真实 PHP-FPM 命令验收应使用下一节的 Docker lab。</p>
+<h2 id="chatbug-php2shell-lab-docker-list"><code>chatbug php2shell lab docker-list</code><a class="headerlink" href="#chatbug-php2shell-lab-docker-list" title="Permanent link">&para;</a></h2>
+<p>该命令必须提供 <code>--ssh-host</code>，且只用于自有 Docker 主机。它创建唯一 Compose project、internal Docker network 和临时合成 webroot；不发布主机端口、不挂载生产数据库/邮件/附件/用户目录/凭据/日志。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>chatbug<span class="w"> </span>php2shell<span class="w"> </span>lab<span class="w"> </span>docker-list<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span>--ssh-host<span class="w"> </span>&lt;owned-docker-host&gt;<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span>--fpm-image<span class="w"> </span>&lt;exact-runtime-image-or-digest&gt;<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span>--proof<span class="w"> </span>list-and-marker
+</code></pre></div>
 <ul>
-<li>可配置的精确 PHP-FPM 镜像（默认 <code>php:8.1.34-fpm-alpine</code>，也可传生产同版本 digest-pinned 镜像）+ Nginx；</li>
-<li>internal Docker network，不发布主机端口；</li>
-<li>临时 webroot 只包含 <code>Hello World</code> 和 lab-only <code>include($_GET['page'])</code>；</li>
-<li>只挂载合成文件，不挂生产数据库、邮件、用户目录、凭据、日志或附件；</li>
-<li>结束时自动删除 Compose 项目、网络和远端临时目录。</li>
+<li>默认镜像是 <code>php:8.1.34-fpm-alpine</code>，方便验证工作流；</li>
+<li>要验证与被评估服务一致的 PHP-FPM runtime，请传入其精确镜像 digest；</li>
+<li><code>--keep</code> 会保留临时 lab 供 SSH 人工检查；默认自动清理容器、网络和远端临时目录。</li>
 </ul>
 <p><code>--proof</code> 是固定 allowlist，不接受任意命令：</p>
 <table>
@@ -732,36 +731,59 @@
 <tr>
 <th>proof</th>
 <th>lab 内固定动作</th>
-<th>验收</th>
+<th>正向验收</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>list-tmp</code></td>
 <td><code>ls -la /tmp</code></td>
-<td>返回 lab 临时目录列表</td>
+<td>输出含合成 <code>chatbug-marker.txt</code> 的临时目录列表</td>
 </tr>
 <tr>
 <td><code>cat-marker</code></td>
 <td><code>cat /tmp/chatbug-marker.txt</code></td>
-<td>返回随机合成 marker</td>
+<td>输出本次随机 marker</td>
 </tr>
 <tr>
 <td><code>list-and-marker</code></td>
 <td><code>ls -la /tmp; echo MARKER; cat /tmp/chatbug-marker.txt</code></td>
-<td>同时返回目录列表、<code>MARKER</code> 和随机 marker</td>
+<td>同时输出目录列表、<code>MARKER</code> 和随机 marker</td>
 </tr>
 </tbody>
 </table>
-<p><code>--keep</code> 仅用于手动复查；默认必须清理。保留中的 lab 仍没有公网/主机发布端口。</p>
-<h2 id="_3">证据解释<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
-<ul>
-<li>版本暴露只说明修补优先级，不等于 RCE；</li>
-<li>multipart 200 只说明 parser reachability；</li>
-<li><code>local-list</code> 证明包内确定性的 LFI/session 注入教学链可运行；</li>
-<li><code>docker-list</code> 在同一 PHP-FPM 运行时和故意加入的 lab gadget 上证明文件包含可走到固定 <code>ls/cat</code>；</li>
-<li>没有单独应用 LFI gadget 时，不应把内存破坏 CVE 宣称为“生产 RCE 已复现”。</li>
-</ul>
+<p><code>docker-list</code> 返回 <code>accepted=true</code> 的前提是正/负向 HTTP 状态均为 200、选择 proof 的正向证据出现、负向 <code>hello.php</code> 不出现 marker，并且默认清理完成。它证明的是“指定 PHP-FPM 运行时 + 故意加入的 lab include gadget”可到达固定命令输出，不代表真实业务应用或 PHP2Shell 内存漏洞已被利用。</p>
+<h2 id="_2">选择命令<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>需求</th>
+<th>推荐命令</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>只确认版本暴露</td>
+<td><code>web check &lt;URL&gt; --skip-multipart</code></td>
+</tr>
+<tr>
+<td>确认普通 multipart 入口</td>
+<td><code>web check &lt;URL&gt; --skip-gadget-scan</code></td>
+</tr>
+<tr>
+<td>在授权范围内检查固定 marker/include 线索</td>
+<td><code>web check &lt;URL&gt;</code></td>
+</tr>
+<tr>
+<td>运行无 Docker 的稳定回归用例</td>
+<td><code>lab local-list</code></td>
+</tr>
+<tr>
+<td>验收 PHP-FPM lab 中的固定 <code>ls/cat</code></td>
+<td><code>lab docker-list --ssh-host ... --proof list-and-marker</code></td>
+</tr>
+</tbody>
+</table>
 
 
 

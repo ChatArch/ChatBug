@@ -462,9 +462,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#how-the-real-world-example-maps-to-the-product" class="md-nav__link">
+  <a href="#how-a-real-service-maps-to-the-product" class="md-nav__link">
     <span class="md-ellipsis">
-      How the Real-World Example Maps to the Product
+      How a Real Service Maps to the Product
     </span>
   </a>
   
@@ -595,9 +595,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#how-the-real-world-example-maps-to-the-product" class="md-nav__link">
+  <a href="#how-a-real-service-maps-to-the-product" class="md-nav__link">
     <span class="md-ellipsis">
-      How the Real-World Example Maps to the Product
+      How a Real Service Maps to the Product
     </span>
   </a>
   
@@ -646,25 +646,25 @@
 
 
 <h1 id="capability-map">Capability Map<a class="headerlink" href="#capability-map" title="Permanent link">&para;</a></h1>
-<p>ChatBug currently owns one narrow, acceptance-driven security capability: validating PHP2Shell risk for PHP websites under explicit authorization. It keeps version exposure separate from end-to-end command/file-read proof.</p>
+<p>ChatBug owns one narrow, auditable capability: assessing PHP2Shell risk for PHP websites under explicit authorization. It keeps runtime exposure, controlled marker leads, isolated lab command acceptance, and production memory-vulnerability exploitation separate.</p>
 <h2 id="first-class-capabilities">First-Class Capabilities<a class="headerlink" href="#first-class-capabilities" title="Permanent link">&para;</a></h2>
 <div class="grid cards">
 <ul>
 <li>
-<p><strong>Ordinary website checks</strong></p>
-<p><code>chatbug php2shell web check &lt;URL&gt;</code> treats an ordinary owned website as a website; there is no Mail-specific CLI group. It checks PHP version exposure, multipart parser reachability, and fixed common LFI parameter shapes.</p>
+<p><strong>Ordinary website runtime checks</strong></p>
+<p><code>chatbug php2shell web check &lt;URL&gt;</code> starts from an ordinary Web URL rather than a product-specific webmail/CMS CLI group. It reads PHP version exposure, verifies multipart parsing, and can optionally run a fixed session/include marker probe.</p>
 </li>
 <li>
-<p><strong>Local repeatable lab</strong></p>
-<p><code>chatbug php2shell lab local-list</code> starts an in-process HTTP lab without Docker, root, or a system shell, demonstrating the session upload-progress plus include-gadget chain with positive and negative controls.</p>
+<p><strong>Local contract lab</strong></p>
+<p><code>chatbug php2shell lab local-list</code> uses an in-process HTTP server to lock the positive/negative protocol contract. It starts no PHP, Docker, or shell.</p>
 </li>
 <li>
-<p><strong>Full isolated runtime lab</strong></p>
-<p><code>chatbug php2shell lab docker-list</code> creates an internal-only, one-off, data-free PHP-FPM/Nginx lab on an owned Docker host and accepts fixed <code>ls/cat</code> proof modes.</p>
+<p><strong>Full-runtime Docker lab</strong></p>
+<p><code>chatbug php2shell lab docker-list</code> creates an internal-only, disposable PHP-FPM/Nginx environment with no production data on an owned Docker host. It is the only location where fixed <code>ls/cat</code> proof actions run.</p>
 </li>
 <li>
 <p><strong>Importable Python API</strong></p>
-<p>The CLI stays thin. Version classification, HTTP checks, payload construction, and lab lifecycle are importable and independently tested.</p>
+<p>The CLI only handles arguments and JSON output. Version classification, HTTP requests, marker structure, lab files, and cleanup lifecycle are independently importable and testable.</p>
 </li>
 </ul>
 </div>
@@ -681,68 +681,68 @@
 <tr>
 <td>PHP version-header parsing and fixed-release classification</td>
 <td>Implemented and verified</td>
-<td>Proves version/config exposure only, not exploitability</td>
+<td>Proves version/config exposure, not exploitability</td>
 </tr>
 <tr>
-<td>Ordinary multipart parser reachability check</td>
+<td>Ordinary multipart parser check</td>
 <td>Implemented and verified</td>
-<td>Proves only that a request reaches the upload-progress path</td>
+<td>Proves a request reaches the upload-parser path, not file inclusion or command execution</td>
 </tr>
 <tr>
-<td>Fixed common LFI marker probe</td>
+<td>Fixed session/include marker probe</td>
 <td>Implemented and verified</td>
-<td>File read is proven only when an independent marker is returned server-side</td>
+<td>Marker return is a candidate-path lead requiring review; it does not prove arbitrary system command or user-file disclosure</td>
 </tr>
 <tr>
-<td>Local LFI/session-injection lab</td>
+<td>Local LFI/session contract lab</td>
 <td>Implemented and verified</td>
-<td>Deterministic teaching chain; no real shell or memory-corruption simulation</td>
+<td>Synthetic teaching/regression chain; no real PHP, shell, or memory-corruption payload</td>
 </tr>
 <tr>
-<td>Remote same-runtime Docker lab</td>
+<td>Remote PHP-FPM Docker lab</td>
 <td>Implemented and verified</td>
-<td>Proves fixed <code>ls/cat</code> when the vulnerable runtime has an intentionally added application LFI gadget</td>
+<td>Proves fixed <code>ls/cat</code> output only with a selected runtime plus intentionally added lab-only include gadget</td>
 </tr>
 <tr>
-<td>CVE-2026-109618/109619 memory-corruption RCE exploit</td>
-<td>Not implemented</td>
-<td>No OOM/UAF payload; requires separate authorization and dedicated exploitation research</td>
+<td>CVE-2026-109618/109619 memory-corruption RCE</td>
+<td>Not provided</td>
+<td>No OOM/UAF payload; requires separate risk authorization and dedicated research</td>
 </tr>
 <tr>
-<td>Production exploitation test</td>
+<td>Production memory-vulnerability exploitation</td>
 <td>Not provided by default</td>
-<td>Production contains real data; use safe checks by default</td>
+<td>Live services with real data receive low-impact checks only; no automatic exploitation</td>
 </tr>
 <tr>
 <td>Arbitrary-command framework / reverse shell</td>
 <td>Not provided</td>
-<td><code>docker-list</code> accepts only three fixed proof values</td>
+<td><code>docker-list</code> accepts exactly three fixed proof values</td>
 </tr>
 </tbody>
 </table>
-<h2 id="how-the-real-world-example-maps-to-the-product">How the Real-World Example Maps to the Product<a class="headerlink" href="#how-the-real-world-example-maps-to-the-product" title="Permanent link">&para;</a></h2>
-<p>A real PHP webmail risk assessment splits into two layers:</p>
+<h2 id="how-a-real-service-maps-to-the-product">How a Real Service Maps to the Product<a class="headerlink" href="#how-a-real-service-maps-to-the-product" title="Permanent link">&para;</a></h2>
+<p>A real PHP webmail risk assessment is still two independent questions:</p>
 <ol>
-<li>Treat the service as an ordinary PHP website for <code>web check</code>: identify the PHP version and multipart entry exposed by the actual HTTP SAPI. The service type does not justify a separate mail command.</li>
-<li>When <code>ls/cat</code>-level acceptance is needed, run <code>docker-list</code> with <code>--fpm-image</code> set to the same-runtime image. The lab mounts a synthetic webroot and random marker; it never connects to real mailboxes, databases, or attachment volumes.</li>
+<li>Treat it as an ordinary PHP website for <code>web check</code>, identifying the version and entry point exposed by the actual HTTP SAPI; service type does not warrant a Mail-specific CLI.</li>
+<li>When <code>ls/cat</code>-level acceptance is needed, run <code>docker-list</code> with <code>--fpm-image</code> set to a matching runtime in a data-free Docker lab. The lab mounts only a synthetic webroot and random marker, never real mailboxes, databases, attachments, or user directories.</li>
 </ol>
-<p>“Mail service” affects the runtime image selected for the lab; it does not change the generic CLI model.</p>
+<p>“Mail service” affects the lab image selection and risk level; it does not change the generic CLI model.</p>
 <h2 id="safety-constraints">Safety Constraints<a class="headerlink" href="#safety-constraints" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Every remote check must target an owned or explicitly authorized service.</li>
-<li>Production checks default to no OOM, UAF, crash, brute-force repetition, or arbitrary command.</li>
-<li>The file-read marker is not placed in the validation URL, query, or traversal string, preventing input-reflection false positives.</li>
-<li>Both controls must pass: the include sink returns the marker, while the normal safe endpoint returns only <code>Hello World</code>.</li>
+<li>Production checks send no OOM, UAF, crash payload, brute-force repetition, or arbitrary system command.</li>
+<li><code>web check</code> without <code>--skip-gadget-scan</code> can trigger a controlled PHP <code>echo</code> marker where an LFI exists; confirm authorization and an appropriate logging/maintenance window first.</li>
+<li>The marker never appears in the validation URL, query, or traversal string, preventing input-reflection false positives.</li>
 <li>Docker labs use an internal network, unique Compose project, synthetic data, and automatic cleanup; <code>--keep</code> is for short manual inspection only.</li>
-<li>Reports must distinguish “runtime only” from “runtime + gadget”.</li>
+<li>Reports must distinguish “runtime only,” “controlled marker path,” and “runtime + lab gadget.”</li>
 </ul>
 <h2 id="out-of-scope">Out of Scope<a class="headerlink" href="#out-of-scope" title="Permanent link">&para;</a></h2>
 <ul>
-<li>Scanning the internet or unauthorized hosts.</li>
+<li>Internet-wide or unauthorized scanning.</li>
 <li>Reading real user mail, sessions, attachments, secrets, or production temporary files.</li>
 <li>Restarting, patching, taking offline, or reconfiguring production.</li>
-<li>Hiding a version banner and calling it patched; remediation must be verified by runtime version and released artifacts.</li>
-<li>Treating scanner output, <code>docker exec</code> management-plane execution, or ordinary PHP page execution as unauthenticated RCE.</li>
+<li>Hiding a version banner and calling a service patched; remediation must be proven by the actual runtime version and released artifacts.</li>
+<li>Misreporting scanner output, <code>docker exec</code> management-plane operation, ordinary PHP page execution, or marker reflection as unauthenticated RCE.</li>
 </ul>
 
 

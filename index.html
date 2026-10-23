@@ -360,7 +360,7 @@
         <li class="md-nav__item">
   <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
-      最快开始
+      推荐路径
     </span>
   </a>
   
@@ -369,7 +369,7 @@
         <li class="md-nav__item">
   <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
-      核心结论
+      当前结论
     </span>
   </a>
   
@@ -377,15 +377,6 @@
       
         <li class="md-nav__item">
   <a href="#_4" class="md-nav__link">
-    <span class="md-ellipsis">
-      文档状态约定
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       本地开发预览
     </span>
@@ -583,7 +574,7 @@
         <li class="md-nav__item">
   <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
-      最快开始
+      推荐路径
     </span>
   </a>
   
@@ -592,7 +583,7 @@
         <li class="md-nav__item">
   <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
-      核心结论
+      当前结论
     </span>
   </a>
   
@@ -600,15 +591,6 @@
       
         <li class="md-nav__item">
   <a href="#_4" class="md-nav__link">
-    <span class="md-ellipsis">
-      文档状态约定
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       本地开发预览
     </span>
@@ -641,60 +623,78 @@
 
 
 <h1 id="chatbug">ChatBug 文档<a class="headerlink" href="#chatbug" title="Permanent link">&para;</a></h1>
-<p>ChatBug 是 ChatArch 系列的授权网站漏洞验证包。当前首个能力聚焦 PHP2Shell：对自有普通网站做安全暴露检查，并在无真实数据的一次性 lab 中复现“运行时 + LFI gadget → session upload-progress 注入 → <code>ls/cat</code> 输出”的完整验收链。</p>
+<p>ChatBug 是 ChatArch 系列的授权网站漏洞验证包。它将 PHP2Shell 风险拆成可审计的证据层级：Web 运行时版本/入口暴露、受控 session/include marker，以及只在无生产数据 lab 中完成的固定 <code>ls/cat</code> 验收。</p>
 <p>站点入口：<a href="https://arch.gh.wzhecnu.cn/ChatBug/">https://arch.gh.wzhecnu.cn/ChatBug/</a></p>
 <h2 id="_1">按场景选择文档<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
 <th>场景</th>
-<th>文档</th>
+<th>从这里开始</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>查看完整命令、选项和退出码</td>
-<td><a href="cli-tree/">CLI 树</a></td>
+<td>只想确认运行时暴露，不做 gadget 请求</td>
+<td><a href="cli-tree/#chatbug-php2shell-web-check-url">CLI 树：<code>web check</code> 低影响模式</a></td>
 </tr>
 <tr>
-<td>理解能力状态、证据层级和安全边界</td>
+<td>需要理解 marker 探测的影响和证据边界</td>
 <td><a href="capability-map/">能力地图</a></td>
 </tr>
 <tr>
-<td>从 Python 代码调用检查或 lab API</td>
-<td><a href="interface-tree/">Python 接口树</a></td>
+<td>需要本机可运行的回归示例</td>
+<td><a href="php2shell-lab/#本机-contract-lab">PHP2Shell 隔离复现实验：本机 contract lab</a></td>
 </tr>
 <tr>
-<td>跑通本机或 PHP-FPM/Nginx 隔离复现实验</td>
-<td><a href="php2shell-lab/">PHP2Shell 复现实验</a></td>
+<td>需要相同 PHP-FPM 运行时中的 <code>ls/cat</code> 验收</td>
+<td><a href="php2shell-lab/#docker-运行时-lab">PHP2Shell 隔离复现实验：Docker lab</a></td>
+</tr>
+<tr>
+<td>从 Python 调用检查或 lab 生命周期</td>
+<td><a href="interface-tree/">Python 接口树</a></td>
 </tr>
 </tbody>
 </table>
-<h2 id="_2">最快开始<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>ChatBug
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>chatbug<span class="w"> </span>--tree
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>chatbug<span class="w"> </span>php2shell<span class="w"> </span>lab<span class="w"> </span>local-list
-</code></pre></div>
-<p><code>local-list</code> 不需要 Docker、root、网络或真实 shell；它用进程内 HTTP lab 同时验证正向 include sink 和负向普通入口。</p>
-<h2 id="_3">核心结论<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<h2 id="_2">推荐路径<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<div class="grid cards">
 <ul>
-<li><code>web check &lt;URL&gt;</code> 是非破坏性自有网站检查：版本暴露、multipart 可达性和固定 gadget 探测必须分层报告。</li>
-<li><code>lab local-list</code> 是确定性的本机教学/CI 用例。</li>
-<li><code>lab docker-list --ssh-host &lt;host&gt;</code> 在 internal-only Docker lab 中用 exact/digest-pinned PHP-FPM 运行时证明固定 <code>ls/cat</code>，不挂生产数据，不发布端口。</li>
-<li>ChatBug 不发送 OOM/UAF/崩溃 payload，不提供任意命令或 reverse shell，不把版本暴露直接宣称为 RCE。</li>
+<li>
+<p><strong>先做低影响检查</strong></p>
+<p>对自有或已授权 URL 先运行 <code>web check --skip-gadget-scan</code>。它只给出版本和 multipart parser 可达性，不宣称命令执行。</p>
+<p><a href="cli-tree/#chatbug-php2shell-web-check-url">查看检查边界</a></p>
+</li>
+<li>
+<p><strong>再理解 marker 结果</strong></p>
+<p>默认 <code>web check</code> 会增加固定 session/include marker 探测。marker 返回是受控 PHP <code>echo</code> 线索，不是系统命令 RCE 结论。</p>
+<p><a href="capability-map/#capability-status">查看证据层级</a></p>
+</li>
+<li>
+<p><strong>用本机 contract lab 回归</strong></p>
+<p><code>local-list</code> 不启动 PHP、Docker 或 shell；它锁定请求/响应与正负向控制契约。</p>
+<p><a href="php2shell-lab/#本机-contract-lab">运行本机例子</a></p>
+</li>
+<li>
+<p><strong>只在隔离 Docker lab 验收命令输出</strong></p>
+<p><code>docker-list</code> 使用内部网络、合成 marker、固定 proof allowlist 和自动清理。它是唯一提供 <code>ls/cat</code> 输出的路径。</p>
+<p><a href="php2shell-lab/#docker-运行时-lab">运行 Docker lab</a></p>
+</li>
 </ul>
-<h2 id="_4">文档状态约定<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+</div>
+<h2 id="_3">当前结论<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>已实现</strong>：代码、测试和 CLI 路径已经存在。</li>
-<li><strong>已验证</strong>：已经通过本地测试、CI 或一次性隔离 lab 验证。</li>
-<li><strong>不提供</strong>：明确属于安全边界外，例如生产内存破坏利用或任意命令框架。</li>
+<li>版本头或 parser 可达性是修补优先级证据，不是生产 RCE。</li>
+<li>session/include marker 返回需要结合目标应用、日志和授权范围复核；它不表示任意系统命令已经执行。</li>
+<li><code>docker-list</code> 可以在同运行时、故意加入的 lab-only include gadget 中证明固定命令输出，但不能替代对真实应用 gadget 的审计。</li>
+<li>ChatBug 不发送 OOM/UAF/崩溃 payload，不读取生产用户数据，也不自动进行生产内存漏洞利用。</li>
 </ul>
-<h2 id="_5">本地开发预览<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">".[dev,docs]"</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>python<span class="w"> </span>-m<span class="w"> </span>pytest<span class="w"> </span>-q
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>mkdocs<span class="w"> </span>serve
+<h2 id="_4">本地开发预览<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">".[dev,docs]"</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>python<span class="w"> </span>-m<span class="w"> </span>pytest<span class="w"> </span>-q
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>mkdocs<span class="w"> </span>build<span class="w"> </span>--strict
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>mkdocs<span class="w"> </span>serve
 </code></pre></div>
-<p>英文入口：<a href="https://arch.gh.wzhecnu.cn/ChatBug/en/">https://arch.gh.wzhecnu.cn/ChatBug/en/</a>。缺少英文翻译的专题页会通过 i18n fallback 回退到默认语言。</p>
+<p>英文入口：<a href="https://arch.gh.wzhecnu.cn/ChatBug/en/">https://arch.gh.wzhecnu.cn/ChatBug/en/</a>。每个核心页面都有英文镜像；语言切换器可在页面顶部切换。</p>
 
 
 

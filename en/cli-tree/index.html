@@ -421,25 +421,15 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#real-command-tree" class="md-nav__link">
+  <a href="#registered-command-tree" class="md-nav__link">
     <span class="md-ellipsis">
-      Real Command Tree
+      Registered Command Tree
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#commands" class="md-nav__link">
-    <span class="md-ellipsis">
-      Commands
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Commands">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
   <a href="#chatbug-php2shell-web-check-url" class="md-nav__link">
     <span class="md-ellipsis">
       chatbug php2shell web check &lt;URL&gt;
@@ -447,8 +437,8 @@
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
+      
+        <li class="md-nav__item">
   <a href="#chatbug-php2shell-lab-local-list" class="md-nav__link">
     <span class="md-ellipsis">
       chatbug php2shell lab local-list
@@ -456,25 +446,20 @@
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#chatbug-php2shell-lab-docker-list-ssh-host-host-fpm-image-image" class="md-nav__link">
+      
+        <li class="md-nav__item">
+  <a href="#chatbug-php2shell-lab-docker-list" class="md-nav__link">
     <span class="md-ellipsis">
-      chatbug php2shell lab docker-list --ssh-host &lt;host&gt; [--fpm-image &lt;image&gt;]
+      chatbug php2shell lab docker-list
     </span>
   </a>
   
 </li>
-        
-      </ul>
-    </nav>
-  
-</li>
       
         <li class="md-nav__item">
-  <a href="#evidence-interpretation" class="md-nav__link">
+  <a href="#choose-a-command" class="md-nav__link">
     <span class="md-ellipsis">
-      Evidence Interpretation
+      Choose a Command
     </span>
   </a>
   
@@ -592,25 +577,15 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#real-command-tree" class="md-nav__link">
+  <a href="#registered-command-tree" class="md-nav__link">
     <span class="md-ellipsis">
-      Real Command Tree
+      Registered Command Tree
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#commands" class="md-nav__link">
-    <span class="md-ellipsis">
-      Commands
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Commands">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
   <a href="#chatbug-php2shell-web-check-url" class="md-nav__link">
     <span class="md-ellipsis">
       chatbug php2shell web check &lt;URL&gt;
@@ -618,8 +593,8 @@
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
+      
+        <li class="md-nav__item">
   <a href="#chatbug-php2shell-lab-local-list" class="md-nav__link">
     <span class="md-ellipsis">
       chatbug php2shell lab local-list
@@ -627,25 +602,20 @@
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#chatbug-php2shell-lab-docker-list-ssh-host-host-fpm-image-image" class="md-nav__link">
+      
+        <li class="md-nav__item">
+  <a href="#chatbug-php2shell-lab-docker-list" class="md-nav__link">
     <span class="md-ellipsis">
-      chatbug php2shell lab docker-list --ssh-host &lt;host&gt; [--fpm-image &lt;image&gt;]
+      chatbug php2shell lab docker-list
     </span>
   </a>
   
 </li>
-        
-      </ul>
-    </nav>
-  
-</li>
       
         <li class="md-nav__item">
-  <a href="#evidence-interpretation" class="md-nav__link">
+  <a href="#choose-a-command" class="md-nav__link">
     <span class="md-ellipsis">
-      Evidence Interpretation
+      Choose a Command
     </span>
   </a>
   
@@ -676,55 +646,84 @@
 
 
 <h1 id="cli-tree">CLI Tree<a class="headerlink" href="#cli-tree" title="Permanent link">&para;</a></h1>
-<p><code>ChatBug</code> is an authorized vulnerability-validation CLI. The tree below is maintained from the real registered Click surface; before release, run <code>chatbug --tree</code> to verify the documented contract.</p>
-<h2 id="real-command-tree">Real Command Tree<a class="headerlink" href="#real-command-tree" title="Permanent link">&para;</a></h2>
+<p>The tree below comes from ChatBug 0.1.0's registered Click surface. After installation, use <code>chatbug --tree</code> to read back the installed contract; this page describes implemented commands only.</p>
+<h2 id="registered-command-tree">Registered Command Tree<a class="headerlink" href="#registered-command-tree" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>chatbug
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>├── --help                                                                 # Show this message and exit.
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>├── --version                                                              # Show the version and exit.
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>├── --tree                                                                 # Print the registered CLI tree and exit.
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>├── --tree-brief                                                           # Print the registered CLI tree without parameter signatures and exit.
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>└── php2shell                                                              # PHP2Shell web checks and data-free lab proof.
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    ├── lab                                                                # Disposable, data-free lab workflows.
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    │   ├── docker-list --ssh-host TEXT --fpm-image TEXT --proof [list-tmp|cat-marker|list-and-marker] [--keep]  # Prove list/cat inside a data-free PHP-FPM lab with an intentional include sink.
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    │   └── local-list                                                     # Run a complete positive/negative example in an in-process local lab.
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    └── web                                                                # Checks for an ordinary owned website URL.
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>        └── check &lt;URL&gt; [--skip-multipart] [--skip-gadget-scan]            # Check version exposure, parser reachability, and common include gadgets.
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>├── --help  # Show this message and exit.
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>├── --version  # Show the version and exit.
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>├── --tree  # Print the registered CLI tree and exit.
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>├── --tree-brief  # Print the registered CLI tree without parameter signatures and exit.
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>└── php2shell  # PHP2Shell web checks and data-free lab proof.
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    ├── lab  # Disposable, data-free lab workflows.
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    │   ├── docker-list [--ssh-host SSH-HOST] [--fpm-image FPM-IMAGE] [--proof PROOF] [--keep]  # Prove list/cat inside a data-free PHP-FPM lab with an intentional include sink.
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    │   └── local-list  # Run a complete positive/negative example in an in-process local lab.
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    └── web  # Checks for an ordinary owned website URL.
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>        └── check &lt;URL&gt; [--skip-multipart] [--skip-gadget-scan]  # Check version exposure, parser reachability, and common include gadgets.
 </code></pre></div>
-<h2 id="commands">Commands<a class="headerlink" href="#commands" title="Permanent link">&para;</a></h2>
-<h3 id="chatbug-php2shell-web-check-url"><code>chatbug php2shell web check &lt;URL&gt;</code><a class="headerlink" href="#chatbug-php2shell-web-check-url" title="Permanent link">&para;</a></h3>
-<p>Runs non-destructive checks against a website that you own or are explicitly authorized to test:</p>
-<ol>
-<li>reads the PHP version from <code>Server</code> / <code>X-Powered-By</code> and classifies it against fixed releases;</li>
-<li>sends an ordinary multipart POST to prove upload-parser reachability;</li>
-<li>probes a small fixed set of common <code>page/file/include/path</code> parameter shapes for an independent marker;</li>
-<li>emits JSON without sending OOM/UAF/crash payloads or executing system commands on the target.</li>
-</ol>
+<h2 id="chatbug-php2shell-web-check-url"><code>chatbug php2shell web check &lt;URL&gt;</code><a class="headerlink" href="#chatbug-php2shell-web-check-url" title="Permanent link">&para;</a></h2>
+<p>Run this only against a website you own or are explicitly authorized to test. It emits JSON, sends no OOM/UAF/crash payload, and does not invoke a system command on the target.</p>
+<table>
+<thead>
+<tr>
+<th>Invocation</th>
+<th>Actual requests</th>
+<th>Evidence boundary</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>web check &lt;URL&gt; --skip-multipart</code></td>
+<td>HEAD/version headers only</td>
+<td>HTTP/version visibility only</td>
+</tr>
+<tr>
+<td><code>web check &lt;URL&gt; --skip-gadget-scan</code></td>
+<td>HEAD plus ordinary multipart</td>
+<td>Parser reachability; no session-include request</td>
+</tr>
+<tr>
+<td><code>web check &lt;URL&gt;</code></td>
+<td>Above requests plus a fixed session/include marker probe</td>
+<td>Controlled PHP <code>echo</code> marker lead, not a <code>system()</code>/RCE proof</td>
+</tr>
+</tbody>
+</table>
+<p>The default marker probe sends only a fixed <code>&lt;?php echo '&lt;random marker&gt;'; ?&gt;</code> filename, then checks a small fixed set of <code>page</code>, <code>file</code>, <code>include</code>, and <code>path</code> shapes against candidate session locations. It requests no real user file and contains no <code>system()</code> call. If the application has an LFI gadget, it can still execute that controlled <code>echo</code> in the target PHP process and create ordinary request/session logs.</p>
+<p>Use the no-skip form only within authorized scope and an appropriate maintenance window. For low-impact inventory, prefer <code>--skip-gadget-scan</code>.</p>
 <p>Exit codes:</p>
 <ul>
 <li><code>0</code>: the version banner indicates an affected range;</li>
-<li><code>3</code>: checks completed, but an affected version was not proven or the version banner is hidden;</li>
-<li>other non-zero codes: request or local execution errors.</li>
+<li><code>3</code>: the check completed, but an affected version was not proven or the version header is hidden;</li>
+<li>other non-zero values: local argument or request-processing error.</li>
 </ul>
-<p>Options:</p>
+<p>Important fields:</p>
 <ul>
-<li><code>--skip-multipart</code>: perform only version/HTTP checks;</li>
-<li><code>--skip-gadget-scan</code>: skip common include-gadget probes and keep only version and parser-reachability evidence.</li>
+<li><code>verdict=vulnerable_version_exposed</code>: version exposure, not production RCE;</li>
+<li><code>evidence_tier=tier_2_parser_reachable</code>: ordinary multipart traffic reached the parser path;</li>
+<li><code>evidence_tier=tier_3_gadget_found</code>: the fixed marker returned through a candidate include path;</li>
+<li><code>rce_or_file_read_proven=true</code>: a compatibility field name; it currently means only that the controlled marker path worked, not arbitrary command execution, user-data reading, or memory-vulnerability exploitation.</li>
 </ul>
-<h3 id="chatbug-php2shell-lab-local-list"><code>chatbug php2shell lab local-list</code><a class="headerlink" href="#chatbug-php2shell-lab-local-list" title="Permanent link">&para;</a></h3>
-<p>Starts a temporary in-process HTTP lab and runs both positive and negative controls:</p>
+<h2 id="chatbug-php2shell-lab-local-list"><code>chatbug php2shell lab local-list</code><a class="headerlink" href="#chatbug-php2shell-lab-local-list" title="Permanent link">&para;</a></h2>
+<p>The local contract lab is for CI, documentation, and regression:</p>
 <ul>
-<li>positive: the synthetic LFI include sink reads session upload-progress content and returns <code>/tmp</code>, <code>chatbug-marker.txt</code>, and a random marker;</li>
-<li>negative: normal <code>hello.php</code>, even with the same path parameter, returns only <code>Hello World</code>;</li>
-<li>no Docker, root, network, or real shell is required. This command is suitable for CI, documentation, and first reproduction.</li>
+<li>binds a temporary <code>127.0.0.1</code> HTTP endpoint in the current process;</li>
+<li>simulates the upload-progress/session and lab-only include-sink positive response;</li>
+<li>uses ordinary <code>hello.php</code> as the negative control;</li>
+<li>emits synthetic <code>/tmp</code>, <code>chatbug-marker.txt</code>, and random-marker output;</li>
+<li>closes the socket/thread and clears in-memory state on exit.</li>
 </ul>
-<h3 id="chatbug-php2shell-lab-docker-list-ssh-host-host-fpm-image-image"><code>chatbug php2shell lab docker-list --ssh-host &lt;host&gt; [--fpm-image &lt;image&gt;]</code><a class="headerlink" href="#chatbug-php2shell-lab-docker-list-ssh-host-host-fpm-image-image" title="Permanent link">&para;</a></h3>
-<p>Creates a one-off full-runtime lab on an owned SSH host with Docker:</p>
+<p>It starts no PHP, Docker, or system shell, so it is not evidence of real PHP command execution. Use the Docker lab for actual PHP-FPM acceptance.</p>
+<h2 id="chatbug-php2shell-lab-docker-list"><code>chatbug php2shell lab docker-list</code><a class="headerlink" href="#chatbug-php2shell-lab-docker-list" title="Permanent link">&para;</a></h2>
+<p>This command requires <code>--ssh-host</code> and is only for an owned Docker host. It creates a unique Compose project, internal Docker network, and temporary synthetic webroot. It publishes no host port and mounts no production database, mail, attachment, user-directory, credential, or log volume.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>chatbug<span class="w"> </span>php2shell<span class="w"> </span>lab<span class="w"> </span>docker-list<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span>--ssh-host<span class="w"> </span>&lt;owned-docker-host&gt;<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span>--fpm-image<span class="w"> </span>&lt;exact-runtime-image-or-digest&gt;<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span>--proof<span class="w"> </span>list-and-marker
+</code></pre></div>
 <ul>
-<li>exact PHP-FPM image plus Nginx;</li>
-<li>internal Docker network with no published host port;</li>
-<li>temporary webroot containing only <code>Hello World</code> and a lab-only <code>include($_GET['page'])</code>;</li>
-<li>only synthetic files are mounted; no production database, mail, user directory, credentials, logs, or attachments are attached;</li>
-<li>the Compose project, network, and remote temporary directory are removed automatically.</li>
+<li>The default image is <code>php:8.1.34-fpm-alpine</code> for workflow validation.</li>
+<li>For parity with an assessed service, pass its exact PHP-FPM image digest.</li>
+<li><code>--keep</code> retains the temporary lab for SSH inspection; otherwise containers, network, and remote temporary directory are removed.</li>
 </ul>
 <p><code>--proof</code> is a fixed allowlist and never accepts arbitrary commands:</p>
 <table>
@@ -732,36 +731,59 @@
 <tr>
 <th>proof</th>
 <th>Fixed lab action</th>
-<th>Acceptance</th>
+<th>Positive acceptance</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>list-tmp</code></td>
 <td><code>ls -la /tmp</code></td>
-<td>Returns the lab temporary-directory listing</td>
+<td>Lists the synthetic <code>chatbug-marker.txt</code> in the temporary directory</td>
 </tr>
 <tr>
 <td><code>cat-marker</code></td>
 <td><code>cat /tmp/chatbug-marker.txt</code></td>
-<td>Returns a random synthetic marker</td>
+<td>Returns this run's random marker</td>
 </tr>
 <tr>
 <td><code>list-and-marker</code></td>
 <td><code>ls -la /tmp; echo MARKER; cat /tmp/chatbug-marker.txt</code></td>
-<td>Returns the listing, <code>MARKER</code>, and random marker</td>
+<td>Returns listing, <code>MARKER</code>, and random marker</td>
 </tr>
 </tbody>
 </table>
-<p><code>--keep</code> is only for manual inspection. A retained lab still has no public/host-published port.</p>
-<h2 id="evidence-interpretation">Evidence Interpretation<a class="headerlink" href="#evidence-interpretation" title="Permanent link">&para;</a></h2>
-<ul>
-<li>Version exposure sets remediation priority but is not RCE.</li>
-<li>Multipart HTTP 200 only proves parser reachability.</li>
-<li><code>local-list</code> proves the deterministic LFI/session-injection teaching chain inside the package.</li>
-<li><code>docker-list</code> proves that, on the same PHP-FPM runtime with an intentionally added lab gadget, file inclusion can reach fixed <code>ls/cat</code> actions.</li>
-<li>Without a separate application LFI gadget, a memory-corruption CVE must not be described as “production RCE reproduced”.</li>
-</ul>
+<p><code>docker-list</code> returns <code>accepted=true</code> only when positive/negative HTTP statuses are 200, the proof-specific positive evidence appears, the negative <code>hello.php</code> response contains no marker, and default cleanup completes. It proves that the selected PHP-FPM runtime plus an intentionally added lab include gadget reaches fixed command output; it does not show that a real application or a PHP2Shell memory vulnerability was exploited.</p>
+<h2 id="choose-a-command">Choose a Command<a class="headerlink" href="#choose-a-command" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Goal</th>
+<th>Recommended command</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Confirm version exposure only</td>
+<td><code>web check &lt;URL&gt; --skip-multipart</code></td>
+</tr>
+<tr>
+<td>Confirm ordinary multipart entry point</td>
+<td><code>web check &lt;URL&gt; --skip-gadget-scan</code></td>
+</tr>
+<tr>
+<td>Check a fixed marker/include lead within authorized scope</td>
+<td><code>web check &lt;URL&gt;</code></td>
+</tr>
+<tr>
+<td>Run a stable Docker-free regression</td>
+<td><code>lab local-list</code></td>
+</tr>
+<tr>
+<td>Accept fixed PHP-FPM-lab <code>ls/cat</code> output</td>
+<td><code>lab docker-list --ssh-host ... --proof list-and-marker</code></td>
+</tr>
+</tbody>
+</table>
 
 
 

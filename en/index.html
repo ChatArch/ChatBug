@@ -349,36 +349,27 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#choose-documentation-by-scenario" class="md-nav__link">
+  <a href="#choose-a-path" class="md-nav__link">
     <span class="md-ellipsis">
-      Choose Documentation by Scenario
+      Choose a Path
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#quick-start" class="md-nav__link">
+  <a href="#recommended-route" class="md-nav__link">
     <span class="md-ellipsis">
-      Quick Start
+      Recommended Route
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#core-conclusions" class="md-nav__link">
+  <a href="#current-conclusions" class="md-nav__link">
     <span class="md-ellipsis">
-      Core Conclusions
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#documentation-status" class="md-nav__link">
-    <span class="md-ellipsis">
-      Documentation Status
+      Current Conclusions
     </span>
   </a>
   
@@ -572,36 +563,27 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#choose-documentation-by-scenario" class="md-nav__link">
+  <a href="#choose-a-path" class="md-nav__link">
     <span class="md-ellipsis">
-      Choose Documentation by Scenario
+      Choose a Path
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#quick-start" class="md-nav__link">
+  <a href="#recommended-route" class="md-nav__link">
     <span class="md-ellipsis">
-      Quick Start
+      Recommended Route
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#core-conclusions" class="md-nav__link">
+  <a href="#current-conclusions" class="md-nav__link">
     <span class="md-ellipsis">
-      Core Conclusions
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#documentation-status" class="md-nav__link">
-    <span class="md-ellipsis">
-      Documentation Status
+      Current Conclusions
     </span>
   </a>
   
@@ -641,60 +623,78 @@
 
 
 <h1 id="chatbug-docs">ChatBug Docs<a class="headerlink" href="#chatbug-docs" title="Permanent link">&para;</a></h1>
-<p>ChatBug is an authorized website vulnerability-validation package from the ChatArch series. Its first capability focuses on PHP2Shell: safe exposure checks for ordinary owned websites, plus a disposable data-free lab that reproduces the complete acceptance chain “runtime + LFI gadget → session upload-progress injection → <code>ls/cat</code> output”.</p>
+<p>ChatBug is a ChatArch package for authorized website vulnerability validation. It separates PHP2Shell risk into auditable evidence tiers: Web-runtime version/entry-point exposure, a controlled session/include marker, and fixed <code>ls/cat</code> acceptance performed only in a lab with no production data.</p>
 <p>Site entry: <a href="https://arch.gh.wzhecnu.cn/ChatBug/en/">https://arch.gh.wzhecnu.cn/ChatBug/en/</a></p>
-<h2 id="choose-documentation-by-scenario">Choose Documentation by Scenario<a class="headerlink" href="#choose-documentation-by-scenario" title="Permanent link">&para;</a></h2>
+<h2 id="choose-a-path">Choose a Path<a class="headerlink" href="#choose-a-path" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Scenario</th>
-<th>Document</th>
+<th>Goal</th>
+<th>Start here</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>View complete commands, options, and exit codes</td>
-<td><a href="cli-tree/">CLI Tree</a></td>
+<td>Confirm runtime exposure without gadget requests</td>
+<td><a href="cli-tree/#chatbug-php2shell-web-check-url">CLI Tree: low-impact <code>web check</code></a></td>
 </tr>
 <tr>
-<td>Understand capability status, evidence tiers, and safety boundaries</td>
+<td>Understand marker-probe effects and evidence boundaries</td>
 <td><a href="capability-map/">Capability Map</a></td>
 </tr>
 <tr>
-<td>Call checks or lab APIs from Python</td>
-<td><a href="interface-tree/">Python Interface Tree</a></td>
+<td>Run a local, runnable regression example</td>
+<td><a href="php2shell-lab/#local-contract-lab">PHP2Shell Lab: local contract lab</a></td>
 </tr>
 <tr>
-<td>Run the local or PHP-FPM/Nginx isolated reproduction lab</td>
-<td><a href="php2shell-lab/">PHP2Shell Reproduction Lab</a></td>
+<td>Obtain <code>ls/cat</code> acceptance in a matching PHP-FPM runtime</td>
+<td><a href="php2shell-lab/#docker-runtime-lab">PHP2Shell Lab: Docker runtime lab</a></td>
+</tr>
+<tr>
+<td>Call checks or lab lifecycle APIs from Python</td>
+<td><a href="interface-tree/">Python Interface Tree</a></td>
 </tr>
 </tbody>
 </table>
-<h2 id="quick-start">Quick Start<a class="headerlink" href="#quick-start" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>ChatBug
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>chatbug<span class="w"> </span>--tree
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>chatbug<span class="w"> </span>php2shell<span class="w"> </span>lab<span class="w"> </span>local-list
-</code></pre></div>
-<p><code>local-list</code> requires no Docker, root, network, or real shell. It validates the positive include sink and negative normal entry with an in-process HTTP lab.</p>
-<h2 id="core-conclusions">Core Conclusions<a class="headerlink" href="#core-conclusions" title="Permanent link">&para;</a></h2>
+<h2 id="recommended-route">Recommended Route<a class="headerlink" href="#recommended-route" title="Permanent link">&para;</a></h2>
+<div class="grid cards">
 <ul>
-<li><code>web check &lt;URL&gt;</code> is a non-destructive owned-website check. Version exposure, multipart reachability, and fixed gadget probes are reported as separate evidence tiers.</li>
-<li><code>lab local-list</code> is a deterministic local teaching/CI example.</li>
-<li><code>lab docker-list --ssh-host &lt;host&gt;</code> proves fixed <code>ls/cat</code> actions with an exact/digest-pinned PHP-FPM runtime in an internal-only Docker lab; it mounts no production data and publishes no port.</li>
-<li>ChatBug does not send OOM/UAF/crash payloads, provide arbitrary commands or reverse shells, or describe version exposure as RCE.</li>
+<li>
+<p><strong>Start with a low-impact check</strong></p>
+<p>Run <code>web check --skip-gadget-scan</code> against an owned or authorized URL. It reports version and multipart-parser reachability without asserting command execution.</p>
+<p><a href="cli-tree/#chatbug-php2shell-web-check-url">Read the check boundary</a></p>
+</li>
+<li>
+<p><strong>Interpret marker results precisely</strong></p>
+<p>Default <code>web check</code> adds a fixed session/include marker probe. Marker return is a controlled PHP <code>echo</code> lead, not a system-command RCE conclusion.</p>
+<p><a href="capability-map/#capability-status">Read the evidence tiers</a></p>
+</li>
+<li>
+<p><strong>Use the local contract lab for regression</strong></p>
+<p><code>local-list</code> starts no PHP, Docker, or shell. It locks the request/response and positive/negative-control contract.</p>
+<p><a href="php2shell-lab/#local-contract-lab">Run the local example</a></p>
+</li>
+<li>
+<p><strong>Accept command output only in the isolated Docker lab</strong></p>
+<p><code>docker-list</code> uses an internal network, synthetic marker, fixed proof allowlist, and automatic cleanup. It is the only path that returns <code>ls/cat</code> output.</p>
+<p><a href="php2shell-lab/#docker-runtime-lab">Run the Docker lab</a></p>
+</li>
 </ul>
-<h2 id="documentation-status">Documentation Status<a class="headerlink" href="#documentation-status" title="Permanent link">&para;</a></h2>
+</div>
+<h2 id="current-conclusions">Current Conclusions<a class="headerlink" href="#current-conclusions" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>Implemented</strong>: code, tests, and CLI paths exist.</li>
-<li><strong>Verified</strong>: covered by local tests, CI, or a disposable isolated lab.</li>
-<li><strong>Not provided</strong>: explicitly outside the safety boundary, such as production memory-corruption exploitation or an arbitrary-command framework.</li>
+<li>Version headers and parser reachability are patch-priority evidence, not production RCE.</li>
+<li>A session/include marker return needs authorization-aware review of the application and logs; it does not show arbitrary system-command execution.</li>
+<li><code>docker-list</code> can prove fixed command output in a matching runtime with an intentionally added lab-only include gadget. It does not replace an audit for a real application gadget.</li>
+<li>ChatBug sends no OOM/UAF/crash payload, reads no production user data, and does not automate production memory-vulnerability exploitation.</li>
 </ul>
 <h2 id="local-development-preview">Local Development Preview<a class="headerlink" href="#local-development-preview" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">".[dev,docs]"</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>python<span class="w"> </span>-m<span class="w"> </span>pytest<span class="w"> </span>-q
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>mkdocs<span class="w"> </span>serve
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">".[dev,docs]"</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>python<span class="w"> </span>-m<span class="w"> </span>pytest<span class="w"> </span>-q
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>mkdocs<span class="w"> </span>build<span class="w"> </span>--strict
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>mkdocs<span class="w"> </span>serve
 </code></pre></div>
-<p>The Chinese entry is <a href="https://arch.gh.wzhecnu.cn/ChatBug/">https://arch.gh.wzhecnu.cn/ChatBug/</a>. Topic pages without English translations fall back through i18n to the default language.</p>
+<p>The Chinese entry is <a href="https://arch.gh.wzhecnu.cn/ChatBug/">https://arch.gh.wzhecnu.cn/ChatBug/</a>. Every core page has an English mirror; use the language selector at the top of a page to switch languages.</p>
 
 
 
