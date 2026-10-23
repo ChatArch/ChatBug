@@ -1,47 +1,63 @@
 # ChatBug 文档
 
-ChatBug 是 ChatArch 系列的授权网站漏洞验证包。当前首个能力聚焦 PHP2Shell：对自有普通网站做安全暴露检查，并在无真实数据的一次性 lab 中复现“运行时 + LFI gadget → session upload-progress 注入 → `ls/cat` 输出”的完整验收链。
+ChatBug 是 ChatArch 系列的授权网站漏洞验证包。它将 PHP2Shell 风险拆成可审计的证据层级：Web 运行时版本/入口暴露、受控 session/include marker，以及只在无生产数据 lab 中完成的固定 `ls/cat` 验收。
 
 站点入口：<https://arch.gh.wzhecnu.cn/ChatBug/>
 
 ## 按场景选择文档
 
-| 场景 | 文档 |
+| 场景 | 从这里开始 |
 | --- | --- |
-| 查看完整命令、选项和退出码 | [CLI 树](cli-tree.md) |
-| 理解能力状态、证据层级和安全边界 | [能力地图](capability-map.md) |
-| 从 Python 代码调用检查或 lab API | [Python 接口树](interface-tree.md) |
-| 跑通本机或 PHP-FPM/Nginx 隔离复现实验 | [PHP2Shell 复现实验](php2shell-lab.md) |
+| 只想确认运行时暴露，不做 gadget 请求 | [CLI 树：`web check` 低影响模式](cli-tree.md#chatbug-php2shell-web-check-url) |
+| 需要理解 marker 探测的影响和证据边界 | [能力地图](capability-map.md) |
+| 需要本机可运行的回归示例 | [PHP2Shell 隔离复现实验：本机 contract lab](php2shell-lab.md#本机-contract-lab) |
+| 需要相同 PHP-FPM 运行时中的 `ls/cat` 验收 | [PHP2Shell 隔离复现实验：Docker lab](php2shell-lab.md#docker-运行时-lab) |
+| 从 Python 调用检查或 lab 生命周期 | [Python 接口树](interface-tree.md) |
 
-## 最快开始
+## 推荐路径
 
-```bash
-python -m pip install ChatBug
-chatbug --tree
-chatbug php2shell lab local-list
-```
+<div class="grid cards" markdown>
 
-`local-list` 不需要 Docker、root、网络或真实 shell；它用进程内 HTTP lab 同时验证正向 include sink 和负向普通入口。
+- **先做低影响检查**
 
-## 核心结论
+    对自有或已授权 URL 先运行 `web check --skip-gadget-scan`。它只给出版本和 multipart parser 可达性，不宣称命令执行。
 
-- `web check <URL>` 是非破坏性自有网站检查：版本暴露、multipart 可达性和固定 gadget 探测必须分层报告。
-- `lab local-list` 是确定性的本机教学/CI 用例。
-- `lab docker-list --ssh-host <host>` 在 internal-only Docker lab 中用 exact/digest-pinned PHP-FPM 运行时证明固定 `ls/cat`，不挂生产数据，不发布端口。
-- ChatBug 不发送 OOM/UAF/崩溃 payload，不提供任意命令或 reverse shell，不把版本暴露直接宣称为 RCE。
+    [查看检查边界](cli-tree.md#chatbug-php2shell-web-check-url)
 
-## 文档状态约定
+- **再理解 marker 结果**
 
-- **已实现**：代码、测试和 CLI 路径已经存在。
-- **已验证**：已经通过本地测试、CI 或一次性隔离 lab 验证。
-- **不提供**：明确属于安全边界外，例如生产内存破坏利用或任意命令框架。
+    默认 `web check` 会增加固定 session/include marker 探测。marker 返回是受控 PHP `echo` 线索，不是系统命令 RCE 结论。
+
+    [查看证据层级](capability-map.md#capability-status)
+
+- **用本机 contract lab 回归**
+
+    `local-list` 不启动 PHP、Docker 或 shell；它锁定请求/响应与正负向控制契约。
+
+    [运行本机例子](php2shell-lab.md#本机-contract-lab)
+
+- **只在隔离 Docker lab 验收命令输出**
+
+    `docker-list` 使用内部网络、合成 marker、固定 proof allowlist 和自动清理。它是唯一提供 `ls/cat` 输出的路径。
+
+    [运行 Docker lab](php2shell-lab.md#docker-运行时-lab)
+
+</div>
+
+## 当前结论
+
+- 版本头或 parser 可达性是修补优先级证据，不是生产 RCE。
+- session/include marker 返回需要结合目标应用、日志和授权范围复核；它不表示任意系统命令已经执行。
+- `docker-list` 可以在同运行时、故意加入的 lab-only include gadget 中证明固定命令输出，但不能替代对真实应用 gadget 的审计。
+- ChatBug 不发送 OOM/UAF/崩溃 payload，不读取生产用户数据，也不自动进行生产内存漏洞利用。
 
 ## 本地开发预览
 
 ```bash
 python -m pip install -e ".[dev,docs]"
 python -m pytest -q
+mkdocs build --strict
 mkdocs serve
 ```
 
-英文入口：<https://arch.gh.wzhecnu.cn/ChatBug/en/>。缺少英文翻译的专题页会通过 i18n fallback 回退到默认语言。
+英文入口：<https://arch.gh.wzhecnu.cn/ChatBug/en/>。每个核心页面都有英文镜像；语言切换器可在页面顶部切换。

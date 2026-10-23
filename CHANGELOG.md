@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+### Documentation
+
+- Clarified the difference between runtime exposure, controlled session/include marker evidence, isolated lab command acceptance, and production memory-vulnerability exploitation.
+- Added complete English mirrors for the Python interface tree and corrected runnable lab examples, proof-specific acceptance, and live-check side-effect boundaries.
+- Updated preview/production documentation deployment so production deploys preserve the reviewed `dev/` preview path.
+
 ## 0.1.0 - 2026-10-23
 
 ### Added

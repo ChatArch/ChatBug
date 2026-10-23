@@ -1,132 +1,97 @@
 # ChatBug
 
-ChatBug 是 ChatArch 系列的授权网站漏洞验证包。首个能力聚焦 **PHP2Shell**：先对自己拥有的普通网站做无破坏性版本/入口检查，再用一次性、无真实数据的隔离实验环境复现“运行时 + LFI include gadget → session upload-progress 注入 → `ls/cat` 输出”的完整测试链。
+ChatBug 是 ChatArch 系列的授权网站漏洞验证包。当前能力聚焦 PHP2Shell 风险评估：先区分 Web 运行时版本暴露、普通 multipart 解析入口和应用文件包含 gadget，再在一次性、无生产数据的 PHP-FPM lab 中完成固定 `ls/cat` 验收。
 
-它不是通用攻击框架：不发送 OOM/UAF 崩溃 payload，不对生产执行命令，不提供反弹 shell，也不接受任意远程命令参数。
+它不是通用攻击框架：不发送 OOM/UAF/崩溃 payload，不读取生产邮件/附件/会话，不提供反弹 shell，也不接受任意远程命令。
 
 文档入口：<https://arch.gh.wzhecnu.cn/ChatBug/>
 
-## 适用场景
+## 最快开始
 
-- 判断自有 PHP 网站是否暴露在受影响版本范围。
-- 用普通 multipart 请求确认上传解析入口是否可达。
-- 用固定、小规模的常见 include 参数形态做**标记文件读取**探测。
-- 在本地进程实验或远端一次性 Docker 实验中，跑通可重复的 `ls -la /tmp` / `cat /tmp/chatbug-marker.txt` 验收。
-- 向团队输出可审计 JSON，区分“版本暴露”“解析器可达”“隔离链复现成功”和“生产利用未证明”。
-
-## 安全边界
-
-| 命令 | 作用对象 | 是否执行命令 | 是否接触生产数据 |
-| --- | --- | --- | --- |
-| `chatbug php2shell web check <URL>` | 自有普通网站 URL | 否 | 否；只发 HEAD、普通 multipart 和固定 gadget 探测 |
-| `chatbug php2shell lab local-list` | 本机临时 HTTP lab | 否；不启动系统 shell | 否；进程内合成数据 |
-| `chatbug php2shell lab docker-list` | 远端一次性内部 Docker lab | 仅 lab 固定 allowlist 命令 | 否；无生产卷、无发布端口、合成 marker |
-
-`docker-list` 复现的是传统、确定性的 PHP `include` 文件包含链：`PHP_SESSION_UPLOAD_PROGRESS` 写入 session 文件，lab-only 的 `include($_GET['page'])` 再包含该文件。它证明“受影响 PHP-FPM 运行时 + 应用存在 LFI gadget”时可以走到 `ls/cat`，**不单独证明 CVE-2026-109618/109619 的内存破坏 RCE**。
-
-## 安装
+先对自己拥有或已获明确授权的网站做低影响运行时检查：
 
 ```bash
 python -m pip install ChatBug
-chatbug --version
-chatbug --tree
+chatbug php2shell web check https://owned-site.example/ --skip-gadget-scan
 ```
 
-开发环境：
-
-```bash
-python -m pip install -e ".[dev]"
-python -m pytest -q
-```
-
-## 快速复现：本机可运行 test case
-
-无需 Docker、无需 root、无需网络：
+然后跑不依赖 Docker 的本机协议/回归用例：
 
 ```bash
 chatbug php2shell lab local-list
 ```
 
-成功时输出 JSON，关键字段包括：
-
-- `accepted: true`
-- `positive_status: 200`
-- `negative_status: 200`
-- `positive_output` 包含 `/tmp`、`chatbug-marker.txt` 和随机 marker
-- `negative_body` 只有 `Hello World`，证明普通安全入口不会把 session 文件当 PHP 执行
-
-这个命令也由测试覆盖：
-
-```bash
-python -m pytest -q tests/test_php2shell.py
-```
-
-## 完整隔离复现：PHP-FPM + Nginx
-
-需要一个可通过 SSH 使用 Docker 的自有主机。该命令会：
-
-1. 拉取固定 digest 的 PHP/PHP-FPM 镜像作为运行时；
-2. 生成只含 `Hello World` 和 lab-only `include` sink 的临时 webroot；
-3. 创建 internal Docker network，不发布主机端口；
-4. 在 lab 容器的 `/tmp/chatbug-marker.txt` 写入随机合成 marker；
-5. 从同一内部网络的一次性 client 容器发送 session upload-progress 请求；
-6. 正向请求通过 lab-only LFI sink 返回 `ls/cat` 输出；
-7. 负向请求访问普通 `hello.php`，只返回 `Hello World`；
-8. 删除容器、网络和远端临时目录。
+若需要真正的 PHP-FPM `ls/cat` 验收，使用自有 SSH Docker 主机创建内部一次性 lab：
 
 ```bash
 chatbug php2shell lab docker-list \
-  --ssh-host <your-ssh-host> \
-  [--fpm-image <digest-pinned-php-fpm-image>] \
+  --ssh-host <owned-docker-host> \
+  --fpm-image <exact-runtime-image-or-digest> \
   --proof list-and-marker
 ```
 
-`--proof` 只允许三个固定模式：
+默认 `--fpm-image` 是方便复现的 `php:8.1.34-fpm-alpine`。要验证与某服务相同的运行时，传入该服务对应的固定镜像 digest；不要挂载或复制生产卷。
 
-- `list-tmp`：执行 lab 内 `ls -la /tmp`；
-- `cat-marker`：读取 lab 内合成 marker 文件；
-- `list-and-marker`：同时列目录并读取 marker（默认）。
+## 能力与边界
 
-真实验收输出会在 `positive_output` 中包含 lab 的 `/tmp` 列表、`sess_<id>` 文件、`MARKER` 和随机 marker；负向输出必须保持 `Hello World`。
+| 命令 | 目标 | 请求/执行范围 | 结论边界 |
+| --- | --- | --- | --- |
+| `web check <URL> --skip-gadget-scan` | 自有网站 | HEAD 与普通 multipart parser 请求 | 版本/入口暴露，不是 RCE |
+| `web check <URL>` | 自有网站 | 额外固定 session/include marker 探测 | 受控 PHP `echo` marker 线索；不是系统命令证明 |
+| `lab local-list` | 本机进程内 HTTP lab | 合成正/负向响应 | HTTP/payload 合约回归，不运行 PHP 或 shell |
+| `lab docker-list` | 自有 Docker 主机 | 内部网络的 PHP-FPM/Nginx 一次性 lab | runtime + lab-only include gadget 下固定 `ls/cat` 成功 |
 
-## 检查自有普通网站
+`docker-list` 复现的是传统、确定性的 PHP `session upload-progress + include` 链：lab 将请求元数据写入 session 文件，lab-only 的 `include($_GET['page'])` 再包含该文件。它说明**同一 PHP-FPM 运行时加上明确存在的应用 gadget**能够走到固定命令输出；它不单独证明 CVE-2026-109618/109619 的内存破坏 RCE，也不说明真实业务应用存在同一 gadget。
 
-```bash
-chatbug php2shell web check https://example-owned-site.example/
-```
+## 生产检查安全说明
 
-输出字段解释：
+`web check` 只适用于自己拥有或已获书面授权的目标。三个选项的影响不同：
 
-- `verdict=vulnerable_version_exposed`：版本头显示在受影响范围，只代表暴露，不代表 RCE；
-- `evidence_tier=tier_2_parser_reachable`：普通 multipart 解析入口可达；
-- `evidence_tier=tier_3_gadget_found`：固定探测中发现服务端返回了独立 marker；
-- `rce_or_file_read_proven=true`：只有在标记不能由请求反射解释、确实从服务端 session 文件包含返回时才成立。
+- `--skip-multipart`：只读取 HTTP/版本头，不发送 multipart 请求；
+- `--skip-gadget-scan`：保留普通 multipart parser 检查，但不请求常见 session-file include 形态；
+- 无跳过选项：会发送一个固定、无系统命令的 PHP `echo` marker filename，并在固定小范围内检查 marker 是否经候选 session include 路径返回。
 
-可跳过较重的探测：
+最后一种探测不使用 `system()`、不发送 OOM/UAF payload，也不会读取生产 marker/用户数据；但若目标确实存在 LFI gadget，它可能导致该**受控 `echo`** 在目标 PHP 进程中执行并产生普通请求/session 日志。因此应在授权范围和维护窗口内运行，不应把它称为“无副作用扫描”。
 
-```bash
-chatbug php2shell web check https://example-owned-site.example/ --skip-gadget-scan
-```
+输出中的 `rce_or_file_read_proven=true` 是兼容字段名。在当前安全检查中，它只表示独立 marker 通过一个固定的 session/include 候选路径返回；它**不等于**任意系统命令 RCE、真实用户文件泄露或 PHP2Shell 内存漏洞已在生产复现。命令输出级验收只在隔离 `docker-list` lab 中提供。
 
 ## 证据层级
 
-ChatBug 不把弱证据升级成强结论：
+ChatBug 不会把弱证据升级成强结论：
 
-1. 版本/配置暴露；
-2. 解析器或前置条件可达；
-3. 一次性隔离环境中完成 marker/命令输出验收；
-4. 经单独风险授权后的生产验证；
-5. 第三方真实入侵指标。
+1. **版本/配置暴露**：运行时版本头或配置前置条件；
+2. **解析器可达**：普通 multipart 请求到达请求处理路径；
+3. **受控 marker**：固定 session/include 探测返回独立 marker；
+4. **隔离链成功**：无数据 lab 内返回固定 `ls/cat` 输出；
+5. **生产内存漏洞利用**：不由 ChatBug 自动执行，需单独风险授权与专门研究。
 
-对邮件、文档等含真实用户数据的生产服务，不应发送内存破坏、OOM、崩溃或重复利用流量；先用同镜像、无数据 lab 完成验收。
+对邮件、文档等含真实用户数据的生产服务，不应发送内存破坏、OOM、崩溃或重复利用流量。先用同镜像、无数据 lab 完成验证，再独立安排修复与取证。
+
+## 安装与验证
+
+```bash
+python -m pip install ChatBug
+chatbug --version
+chatbug --tree
+chatbug --tree-brief
+chatbug php2shell lab local-list
+```
+
+开发环境：
+
+```bash
+python -m pip install -e ".[dev,docs]"
+python -m pytest -q
+mkdocs build --strict
+```
 
 ## 文档
 
 - [CLI 树](docs/cli-tree.md)
 - [能力地图](docs/capability-map.md)
 - [Python 接口树](docs/interface-tree.md)
-- [PHP2Shell 复现实验](docs/php2shell-lab.md)
+- [PHP2Shell 隔离复现实验](docs/php2shell-lab.md)
 
 ## 开发说明
 
-扩展能力前先阅读 `DEVELOP.md` 和 `AGENTS.md`。新增生产检查必须保持非破坏性；任何需要固定命令以外的实验能力，应先增加独立、隔离、可清理的 lab，而不是扩展远程任意命令接口。
+扩展能力前先阅读 `DEVELOP.md` 和 `AGENTS.md`。任何超过固定 lab proof 的实验能力，都必须首先设计成独立、隔离、可清理且含正/负向验收的 lab；不要扩展为任意远程命令接口。
