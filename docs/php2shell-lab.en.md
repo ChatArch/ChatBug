@@ -1,49 +1,52 @@
-# PHP2Shell Reproduction Lab
+# PHP2Shell Isolated Reproduction Lab
 
-This page explains how ChatBug safely reproduces the complete chain from PHP runtime risk plus an application LFI gadget to `ls/cat` output. The example uses the ordinary-website model; it does not reserve a product-specific CLI group for any one application.
+This page gives ChatBug's complete runnable acceptance path and states exactly what it proves and what it does not. It uses the ordinary-website model rather than reserving a product-specific CLI for any one application.
 
-## Evidence Boundary
+> **Critical boundary:** the PHP2Shell CVEs are PHP runtime memory-safety issues. ChatBug does not send OOM, UAF, or crash payloads for CVE-2026-109618/109619 to either production or the lab. The full lab on this page validates a different deterministic chain: `session upload-progress + application include gadget`. Both may affect patch priority, but they cannot be substituted for or described as the same production-RCE conclusion.
 
-PHP2Shell risk must be split into two layers:
+## Choose the Right Evidence Tier
 
-1. **Runtime exposure**: the HTTP SAPI uses an unfixed PHP version, or the multipart/upload-progress precondition is reachable. This supports upgrade and triage but does not prove command execution.
-2. **End-to-end gadget**: the application also exposes an attacker-controlled `include`/file-inclusion path that includes a session file and executes PHP code inside it. The lab's `ls/cat` result proves this layer.
+| Goal | Recommended command | What it can establish | What it cannot establish |
+| --- | --- | --- | --- |
+| Inventory only the runtime version | `web check <URL> --skip-multipart` | HTTP/version-banner exposure | Parser, gadget, or command execution |
+| Confirm ordinary upload entry point | `web check <URL> --skip-gadget-scan` | Multipart parser reachability | LFI, PHP echo, or system command |
+| Check a fixed session/include marker | `web check <URL>` | Controlled marker-path lead | Arbitrary command, user-data read, or memory-CVE exploitation |
+| Regress request/response contract | `lab local-list` | Local positive/negative protocol contract | Real PHP or shell execution |
+| Accept fixed command output | `lab docker-list` | Fixed `ls/cat` with runtime + lab-only gadget | Real application gadget or production-CVE exploitation |
 
-ChatBug does not send the OOM/UAF/crash payloads for CVE-2026-109618/109619. The remote lab reproduces the deterministic traditional PHP session upload-progress plus LFI chain using an exact/digest-pinned PHP-FPM runtime matching the assessed service.
+## Lab-Only Chain Overview
 
-## Chain Overview
+The following chain is generated only by the temporary environment created by `docker-list`:
 
 ```text
-Unauthenticated multipart POST
-  └─ PHP_SESSION_UPLOAD_PROGRESS makes PHP write request metadata to a session file
-      └─ The filename field carries <?php ... system(fixed command) ... ?>
-          └─ The application exposes include($user_controlled_path)
-              └─ It includes /tmp/sess_<PHPSESSID>
-                  └─ The lab returns delimited ls/cat output
+multipart POST
+  └─ PHP_SESSION_UPLOAD_PROGRESS writes a lab session file
+      └─ filename carries PHP code for a fixed allowlisted proof
+          └─ lab-only include($_GET['page']) includes the session file
+              └─ fixed ls/cat output returns in the positive response
 ```
 
-Missing any condition weakens the conclusion:
+A real application must meet every condition for the same conclusion:
 
-- without an application LFI sink, only runtime/parser exposure is proven;
+- without an application include/LFI sink, report only runtime/parser exposure;
 - `docker exec ... php` is management-plane execution, not unauthenticated exploitation;
-- an ordinary PHP page reading a file does not prove that a remote attacker can execute commands.
+- an ordinary PHP page reading a file does not mean a remote attacker can execute a command.
 
-## 1. Minimal Runnable Local Example
+## Local Contract Lab {#local-contract-lab}
 
 ```bash
 python -m pip install ChatBug
 chatbug php2shell lab local-list
 ```
 
-The command:
+The command starts a temporary HTTP server bound to `127.0.0.1:0` in the current process and runs positive and negative controls:
 
-- starts an in-process HTTP lab bound to a temporary `127.0.0.1` port;
-- sends an upload-progress multipart request;
-- requests the synthetic include sink;
-- requests the normal `hello.php` negative control;
-- closes the socket/thread and clears in-memory state on exit.
+- a multipart request is recorded as synthetic session state;
+- positive `vuln.php` returns synthetic `/tmp`, `chatbug-marker.txt`, and a random marker;
+- negative `hello.php` returns only `Hello World`;
+- context cleanup closes socket/thread resources and clears in-memory state.
 
-Successful result shape:
+Successful JSON shape:
 
 ```json
 {
@@ -55,70 +58,59 @@ Successful result shape:
 }
 ```
 
-Acceptance conditions:
-
-- `accepted=true`;
-- positive output contains `/tmp`, `chatbug-marker.txt`, and the random marker;
-- negative output contains only `Hello World`.
-
-The local lab does not start a system shell or real PHP; it is a deterministic teaching/regression chain inside the package. CI can run:
+This is a deterministic contract/regression example. It starts no real PHP, Docker, or system shell. Use it in CI:
 
 ```bash
 python -m pytest -q tests/test_php2shell.py
 ```
 
-## 2. Full PHP-FPM/Nginx Isolated Lab
+## Docker Runtime Lab {#docker-runtime-lab}
 
-On an owned Docker host:
+Run this on an owned Docker host:
 
 ```bash
 chatbug php2shell lab docker-list \
   --ssh-host <owned-docker-host> \
-  [--fpm-image <digest-pinned-php-fpm-image>] \
+  --fpm-image <exact-runtime-image-or-digest> \
   --proof list-and-marker
 ```
 
-ChatBug creates a unique temporary directory under the remote `$HOME/.chatarch/chatbug/labs/` and generates:
+`--ssh-host` is required. The default `php:8.1.34-fpm-alpine` image validates the workflow; for parity with an assessed service, `--fpm-image` must name the exact PHP-FPM runtime digest.
 
-- a exact PHP-FPM image;
-- Nginx proxying to PHP-FPM;
-- `hello.php`, which returns only `Hello World`;
-- `vuln.php`, which exists only in the lab and contains `include($_GET['page'])`;
+Each run creates a unique directory under remote `<chatarch-home>/chatbug/labs/` and only generates:
+
+- the selected PHP-FPM image, Nginx, and one-shot Python client;
+- `hello.php`, which always returns `Hello World`;
+- `vuln.php`, existing only in the lab, containing `include($_GET['page'])`;
 - upload-progress/session settings;
 - an internal-only Docker network;
-- a one-shot Python client container.
+- a random synthetic marker at `/tmp/chatbug-marker.txt`.
 
-It does not mount production databases, mail data, attachments, user directories, credentials, logs, or real session directories, and it publishes no host port.
+It mounts no production database, mail, attachment, user-directory, credential, log, or real session volume, and publishes no host port. By default it deletes the Compose project, network, and remote temporary directory; `--keep` is only for short SSH investigation.
 
-## 3. Fixed Proof Modes
+## Fixed Proof Modes
 
-`--proof` does not accept arbitrary shell commands:
+`--proof` has no arbitrary shell parameter. It permits exactly:
 
-```text
-list-tmp         -> ls -la /tmp
-cat-marker       -> cat /tmp/chatbug-marker.txt
-list-and-marker  -> ls -la /tmp; echo MARKER; cat /tmp/chatbug-marker.txt
-```
+| proof | Fixed lab action | Positive acceptance |
+| --- | --- | --- |
+| `list-tmp` | `ls -la /tmp` | The listing includes synthetic `chatbug-marker.txt` |
+| `cat-marker` | `cat /tmp/chatbug-marker.txt` | Returns this run's random marker |
+| `list-and-marker` | `ls -la /tmp; echo MARKER; cat /tmp/chatbug-marker.txt` | Returns listing, `MARKER`, and random marker |
 
-The default `list-and-marker` provides both a directory listing and unique file content, showing that:
+The default `list-and-marker` is the most complete and auditable acceptance mode.
 
-- the command executed inside the lab container;
-- the response read server-side `/tmp/chatbug-marker.txt`, not a reflected request value.
+## Positive and Negative Acceptance
 
-## 4. Positive and Negative Acceptance
-
-On success, `result.positive_output` contains content like:
+With `list-and-marker`, `result.positive_output` looks like the following. ChatBug removes its internal delimiters and retains only command output:
 
 ```text
-___START___
 total 24
-drwxrwxrwt 1 root root 4096 ... .
 ...
--rw-r--r-- 1 root root 32 ... chatbug-marker.txt
--rw------- 1 www-data www-data ... sess_lab...
+-rw-r--r-- ... chatbug-marker.txt
+-rw------- ... sess_lab...
 MARKER
 CHATBUG_MARKER_...
-___END___
 ```
 
 `result.negative_output` must be:
@@ -127,39 +119,45 @@ ___END___
 Hello World
 ```
 
-`accepted=true` requires all of the following:
+The exact positive condition varies by proof, but `accepted=true` always requires:
 
-- POST returns 200;
-- the positive include sink returns 200;
-- the negative normal page returns 200;
-- positive output contains this run's random marker;
-- negative output does not contain the marker;
-- the Compose project and remote temporary directory are removed successfully.
+- HTTP 200 from multipart POST, positive include, and negative normal page;
+- proof-specific positive evidence (`list-tmp` uses the marker filename; the other two use the random marker);
+- no random marker in negative output;
+- Compose project and remote directory cleanup unless `--keep` was selected.
 
-## 5. Ordinary Production Website Check
+Describe this result as “**selected runtime plus lab-only include gadget proven in isolation**,” never as “production PHP2Shell RCE reproduced.”
 
-For a live service, run only the safe check:
+## Live Website Check
+
+### Low-Impact Version/Entry-Point Check
+
+```bash
+chatbug php2shell web check https://owned-service.example/ --skip-gadget-scan
+```
+
+This reads version headers and sends an ordinary multipart parser check. It makes no session-include request and is appropriate for initial production inventory.
+
+### Authorized Marker Probe
 
 ```bash
 chatbug php2shell web check https://owned-service.example/
 ```
 
-Result fields:
+This mode additionally sends a fixed `<?php echo '<marker>'; ?>` filename and probes a small fixed set of session/include shapes. It executes no system command and reads no real user file, but an LFI can cause the controlled `echo` in the target PHP process. Use it only under explicit authorization and an appropriate logging/maintenance window.
 
-| Field | Meaning |
+| Field | Correct interpretation |
 | --- | --- |
-| `verdict=vulnerable_version_exposed` | The version banner is affected; upgrade/confirm the actual SAPI |
-| `evidence_tier=tier_2_parser_reachable` | An ordinary multipart request reaches the parsing path |
-| `evidence_tier=tier_3_gadget_found` | A fixed probe returned an independent marker, evidence of an include gadget |
-| `rce_or_file_read_proven=false` | File read or RCE is not proven |
+| `verdict=vulnerable_version_exposed` | Version banner is affected; confirm the real HTTP SAPI and plan remediation |
+| `evidence_tier=tier_2_parser_reachable` | Ordinary multipart traffic reached parser path |
+| `evidence_tier=tier_3_gadget_found` | Fixed marker returned through a candidate session/include path; manually review the application gadget |
+| `rce_or_file_read_proven=true` | Compatibility field meaning controlled marker path, not arbitrary system command, real file read, or CVE memory-exploit success |
 
-The command neither runs `ls/cat` in production nor sends memory-corruption payloads.
+## Remediation After Reproduction
 
-## 6. Follow-Up Remediation
-
-1. Inventory every PHP SAPI serving real HTTP traffic: FPM, mod_php, FrankenPHP, LiteSpeed, etc. CLI versions are not Web-runtime evidence.
-2. Upgrade to the official fixed release and read back the new version header, package version, or container digest.
-3. Search for and remove unauthorized file-inclusion/path-construction sinks.
+1. Inventory every PHP SAPI serving real HTTP traffic: FPM, mod_php, FrankenPHP, LiteSpeed, and so on. CLI versions are not Web-runtime evidence.
+2. Upgrade to the official fixed release, then read back the running container digest, package version, or HTTP-SAPI version.
+3. Audit and remove untrusted file-inclusion/path-construction sinks.
 4. Tighten upload handling, session save paths, temporary-directory permissions, and error exposure.
-5. Re-run `web check` after upgrade and rerun the positive/negative data-free lab.
-6. If compromise is suspected, inspect access logs, abnormal sessions, webshells, child processes, and outbound connections separately; vulnerability validation does not replace forensics.
+5. After remediation, rerun low-impact `web check --skip-gadget-scan`, then rerun positive/negative acceptance in the same-image data-free lab.
+6. If compromise is suspected, separately investigate access logs, abnormal sessions, webshells, child processes, and outbound connections. Vulnerability validation is not forensics.
